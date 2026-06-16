@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forex Webpad</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f4f9; padding: 2rem; max-width: 800px; margin: auto; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input { padding: 10px; font-size: 16px; width: 120px; }
+        button { background: #0070f3; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #005bb5; }
+        pre { background: #1e1e1e; color: #4af626; padding: 15px; border-radius: 5px; height: 400px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>📊 Vercel Forex Webpad</h2>
+        <input type="text" id="pairInput" value="EUR/USD">
+        <button onclick="fetchData()">Fetch Data</button>
+        <p id="status"></p>
+        <pre id="output">JSON will appear here...</pre>
+    </div>
+
+    <script>
+        async function fetchData() {
+            const pair = document.getElementById('pairInput').value;
+            const statusText = document.getElementById('status');
+            const outputText = document.getElementById('output');
+
+            statusText.innerText = "Loading...";
+            outputText.innerText = "";
+
+            try {
+                // This calls the Vercel API file you just made in Step 2
+                const res = await fetch(`/api/get-data?instrument=${encodeURIComponent(pair)}`);
+                const json = await res.json();
+                
+                statusText.innerText = "✅ Complete!";
+                outputText.innerText = JSON.stringify(json, null, 2);
+            } catch (error) {
+                statusText.innerText = "❌ Error fetching data.";
+                outputText.innerText = error.message;
+            }
+        }
+    </script>
+</body>
+</html>
